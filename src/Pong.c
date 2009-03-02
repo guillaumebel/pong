@@ -41,7 +41,7 @@ init_game ()
     game->player1_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;
     game->player2_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;    
 
-    game->endgame = 0;
+    game->endgame = FALSE;
     game->paused = FALSE;
 }
 
@@ -50,9 +50,7 @@ start_game ()
 {
     if (clutter_timeline_is_playing (timeline))
     {
-        clutter_timeline_stop (timeline);
-        init_game ();
-        clutter_timeline_start (timeline);
+        game->endgame = FALSE;
     }
     else
     {
@@ -168,9 +166,18 @@ show_scores_cb (GtkAction * action, gpointer data)
 static gint
 end_game_cb (GtkAction * action, gpointer data)
 {
-    game->endgame = TRUE;
-    clutter_timeline_stop (timeline);
-    return game->endgame;
+    pong_ball_set_position (game->ball, game->screen_w / 2, game->screen_h /2);
+    pong_scoreboard_clear (sb);
+    
+    game->player1_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;
+    game->player2_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;   
+
+    pong_paddle_set_position (game->p1, 6, game->player1_y);
+    pong_paddle_set_position (game->p2, game->screen_w - 10, game->player2_y);
+
+    clutter_actor_hide (message_label);
+    game->paused = FALSE;
+    return game->endgame = TRUE;
 }
 
 static gint
@@ -444,7 +451,7 @@ main (int argc, char **argv)
     stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter_widget));
     clutter_stage_set_color (CLUTTER_STAGE (stage), &stage_color);
     clutter_stage_set_user_resizable (CLUTTER_STAGE (stage), TRUE);
-    clutter_stage_hide_cursor (stage);
+    clutter_stage_hide_cursor (CLUTTER_STAGE (stage));
     clutter_actor_show (stage);
     
     //texture
@@ -482,7 +489,7 @@ main (int argc, char **argv)
     //Paddle 2
     pong_paddle_set_size (game->p2, 
                             game->p2->width, game->p2->size);
-    pong_paddle_set_position (game->p2,    game->screen_w - 10, game->player2_y);
+    pong_paddle_set_position (game->p2, game->screen_w - 10, game->player2_y);
 
 
     pong_paddle_set_color (game->p2, start, stop);

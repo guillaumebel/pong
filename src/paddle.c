@@ -100,3 +100,4 @@ void pong_paddle_set_size (Paddle *p, gint w, int h)
     p->size = h;
     clutter_actor_set_size (CLUTTER_ACTOR (p->actor), w, h);
 }
+
