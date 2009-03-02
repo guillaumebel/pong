@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.63])
+AC_PREREQ([2.50])
 AC_INIT([pong], [0.1], [BUG-REPORT-ADDRESS])
 AC_CONFIG_SRCDIR([src/Pong.c])
 AC_CONFIG_HEADERS([config.h])
