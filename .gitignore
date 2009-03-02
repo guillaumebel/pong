@@ -20,6 +20,7 @@ src/.deps/*
 src/Makefile
 src/Makefile.in
 src/*.o
+src/pong
 *~
 stamp-h1
 

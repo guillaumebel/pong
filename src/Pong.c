@@ -182,7 +182,7 @@ pong_preferences_cb (GtkAction * action, gpointer data)
 void window_resize_cb (GtkWidget *widget, GtkRequisition *req, gpointer data) 
 {   
     gtk_window_get_size (GTK_WINDOW (window), &game->screen_w, &game->screen_h);
-    //clutter_actor_set_size ((ClutterActor*)data, game->screen_w, game->screen_h);
+    clutter_actor_set_size ((ClutterActor*)data, game->screen_w, game->screen_h);
 }
 
 void
@@ -343,6 +343,20 @@ key_press_cb (ClutterActor *actor, ClutterEvent *event, gpointer data)
     return TRUE;
 }
 
+static gboolean
+on_stage_motion_event_cb (ClutterActor *actor, ClutterEvent *event, gpointer data)
+{
+    ClutterMotionEvent *mev = (ClutterMotionEvent *)event;
+
+    if (game->player1_y >= 1 && game->player1_y <= (game->screen_h - game->p1->size))
+    {
+        game->player1_y = mev->y;
+        pong_paddle_set_position (game->p1, 6, mev->y);
+    }
+
+    return TRUE;
+}
+
 int 
 main (int argc, char **argv) 
 {
@@ -352,7 +366,7 @@ main (int argc, char **argv)
     //Clutter declaration
     ClutterActor *background = NULL;
     ClutterActor *stage = NULL;
-    ClutterColor stage_color = {0x00, 0x00, 0x00, 0xff};
+    ClutterColor stage_color = {0x01, 0x05, 0x1e, 0xff};
     //ClutterColor actor_color = {0x50, 0x85, 0xfe, 0xff};
     ClutterColor label_color = {0xff, 0x00, 0x00, 0xff};
     
@@ -430,24 +444,38 @@ main (int argc, char **argv)
     stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter_widget));
     clutter_stage_set_color (CLUTTER_STAGE (stage), &stage_color);
     clutter_stage_set_user_resizable (CLUTTER_STAGE (stage), TRUE);
+    clutter_stage_hide_cursor (stage);
     clutter_actor_show (stage);
     
     //texture
-    /*
-    background = clutter_texture_new_from_file ("back.png",NULL);
+    
+    background = clutter_texture_new_from_file ("back2.png",NULL);
     clutter_actor_set_position (background, 0, 0);
     clutter_actor_set_size (background, game->screen_w, game->screen_h);
 
     clutter_actor_set_opacity (background, 0xA9);
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), background);
     clutter_actor_show (background);
-    */
+    
+    PongColor start;
+    start.red = 0.95;
+    start.green = 0.17;
+    start.blue = 0.17;
+    start.alpha = 0.75;
+
+    PongColor stop;
+    stop.red = 0.57;
+    stop.green = 0.02;
+    stop.blue = 0.02;
+    stop.alpha = 0.75;
+
 
     //Paddle 1
     pong_paddle_set_size (game->p1, 
-                            game->p1->width, game->p1->size);                        
+                            game->p1->width, game->p1->size);  
     pong_paddle_set_position (game->p1, 6, game->player1_y);
-    clutter_container_add_actor (CLUTTER_CONTAINER (stage), \
+    
+    clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
                                          game->p1->actor);
     clutter_actor_show (game->p1->actor);
 
@@ -456,16 +484,6 @@ main (int argc, char **argv)
                             game->p2->width, game->p2->size);
     pong_paddle_set_position (game->p2,    game->screen_w - 10, game->player2_y);
 
-    PongColor start;
-    start.red = 0.25;
-    start.green = 0.5;
-    start.blue = 0.85;
-    start.alpha = 0.8;
-    PongColor stop;
-    stop.red = 0.09;
-    stop.green = 0.18;
-    stop.blue = 0.33;
-    stop.alpha = 0.8;
 
     pong_paddle_set_color (game->p2, start, stop);
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
@@ -488,9 +506,11 @@ main (int argc, char **argv)
     clutter_timeline_set_loop(timeline, TRUE); 
 
     //callback connect
+    g_signal_connect (stage, "motion-event", G_CALLBACK (on_stage_motion_event_cb), NULL);
+
     g_signal_connect (timeline, "new-frame", 
                             G_CALLBACK (on_timeline_new_frame), NULL);
-    g_signal_connect (stage, "event", G_CALLBACK (key_press_cb), NULL);
+    g_signal_connect (stage, "key-press-event", G_CALLBACK (key_press_cb), NULL);
     g_signal_connect (window, "hide", G_CALLBACK (gtk_main_quit), NULL);
     g_signal_connect (G_OBJECT (window), "destroy", 
                             G_CALLBACK (gtk_main_quit), NULL);

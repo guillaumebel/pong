@@ -44,8 +44,8 @@ Paddle* pong_paddle_new ()
     pattern = cairo_pattern_create_linear (0, PADDLE_H / 2, 
                                                 PADDLE_W, PADDLE_H / 2);
 
-    cairo_pattern_add_color_stop_rgba (pattern, 0.50,  0.09, 0.18, 0.33, 0.8);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.75,  0.25, 0.5, .85, 0.8);
+    cairo_pattern_add_color_stop_rgba (pattern, 0.40,  0.09, 0.18, 0.33, 0.75);
+    cairo_pattern_add_color_stop_rgba (pattern, 0.75,  0.25, 0.5, .85, 0.75);
 
     cairo_set_source (cr, pattern);
     cairo_fill (cr);
@@ -72,7 +72,7 @@ void pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop)
     pattern = cairo_pattern_create_linear (0, PADDLE_H / 2, 
                                                 PADDLE_W, PADDLE_H / 2);
 
-    cairo_pattern_add_color_stop_rgba (pattern, 0.50,  start.red, 
+    cairo_pattern_add_color_stop_rgba (pattern, 0.40,  start.red, 
                                                        start.green, 
                                                        start.blue, 
                                                        start.alpha);

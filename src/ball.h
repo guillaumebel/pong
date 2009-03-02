@@ -31,7 +31,7 @@
 
 #define DEFAULT_SCREEN_W 480
 #define DEFAULT_SCREEN_H 380
-#define BALL_R 10     // ball size
+#define BALL_R 12     // ball size
 
 typedef struct Ball {
     ClutterActor *actor;

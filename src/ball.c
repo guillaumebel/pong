@@ -78,7 +78,7 @@ Ball* pong_ball_new ()
     cairo_pattern_destroy (pattern);
     cairo_destroy (cr);
   
-      return b;
+    return b;
 }
 
 void pong_ball_set_position (Ball *b, gint x, gint y)
