@@ -32,19 +32,19 @@ pong_config_init ()
     if (!gconf_client_dir_exists (client, "/pong", NULL))
     {
         gconf_client_add_dir (client,
-                          "/pong"
+                          "/pong",
                           GCONF_CLIENT_PRELOAD_NONE,
                           NULL);
         gconf_client_add_dir (client,
-                          "/pong/player1_color"
+                          "/pong/player1_color",
                           GCONF_CLIENT_PRELOAD_NONE,
                           NULL);
         gconf_client_add_dir (client,
-                          "/pong/player2_color"
+                          "/pong/player2_color",
                           GCONF_CLIENT_PRELOAD_NONE,
                           NULL);
         gconf_client_add_dir (client,
-                          "/pong/background_color"
+                          "/pong/background_color",
                           GCONF_CLIENT_PRELOAD_NONE,
                           NULL);              
     
@@ -59,7 +59,7 @@ pong_config_reset_default ()
 
     pong_config_set_int ("width", SCREEN_W);
     pong_config_set_int ("height", SCREEN_H);
-    pong_config_set_int ("difficulty" DIFFICULTY);
+    pong_config_set_int ("difficulty", DIFFICULTY);
     pong_config_set_int ("paddle_size", PADDLE_SIZE);
     pong_config_set_int ("win_score", WIN_SCORE);
 
@@ -73,7 +73,7 @@ pong_config_reset_default ()
 Config*
 pong_config_get_stored ()
 {
-    Config *c = g_new (config,1);
+    Config *c = g_new (Config,1);
 
     c->screen_w = pong_config_get_int ("screen_w");
     c->screen_h = pong_config_get_int ("screen_h");
@@ -85,7 +85,7 @@ pong_config_get_stored ()
 */
     c->win_score = pong_config_get_int ("win_score");
     c->two_player = pong_config_get_bool ("two_player");
-    c->paddke_size = pong_preferencs_get_int ("paddle_size");
+    c->paddle_size = pong_config_get_int ("paddle_size");
 
     return c;
 }
@@ -99,19 +99,19 @@ pong_config_set_string (gchar *key, gchar *value)
 void 
 pong_config_set_int (gchar *key, gint value)
 {
-    gconf_client_set_string (client, g_strconcat("/pong/", key), value, NULL);
+    gconf_client_set_int (client, g_strconcat("/pong/", key), value, NULL);
 }
 
 void 
 pong_config_set_float (gchar *key, gdouble value)
 {
-    gconf_client_set_string (client, g_strconcat("/pong/", key), value, NULL);
+    gconf_client_set_float (client, g_strconcat("/pong/", key), value, NULL);
 }
 
 void 
 pong_config_set_boolean (gchar *key, gboolean value)
 {
-    gconf_client_set_string (client, g_strconcat("/pong/", key), value, NULL);
+    gconf_client_set_bool (client, g_strconcat("/pong/", key), value, NULL);
 }
 
 gchar*
@@ -136,7 +136,7 @@ pong_config_get_int (gchar *key)
 }
 
 gdouble
-pong_config_get_float (gchar *key);
+pong_config_get_float (gchar *key)
 {
     g_return_val_if_fail (check_key (key), -1);
     return gconf_client_get_float (client, g_strconcat("/pong/", key), NULL);
@@ -145,14 +145,14 @@ pong_config_get_float (gchar *key);
 PongColor
 pong_config_get_color (gchar *key)
 {
-    g_return_val_if_fail (check_key (key), NULL);
-
     PongColor color;
+
+    g_return_val_if_fail (check_key (key), color);
 
     color.red = gconf_client_get_float (client, 
                              g_strconcat("/pong/", key, "/red"), NULL);
     color.blue = gconf_client_get_float (client, 
-                             g_strconcat("/pong/", key, "/blue")), NULL;
+                             g_strconcat("/pong/", key, "/blue"), NULL);
     color.green = gconf_client_get_float (client,
                              g_strconcat("/pong/", key, "/green"), NULL);
     color.alpha = gconf_client_get_float (client,
@@ -164,10 +164,11 @@ pong_config_get_color (gchar *key)
 PongColor16
 pong_config_get_color16 (gchar *key)
 {
-    g_return_val_if_fail (check_key (key), NULL);
 
     PongColor16 color;
 
+    g_return_val_if_fail (check_key (key), color );
+    
     color.red = gconf_client_get_int (client, 
                              g_strconcat("/pong/", key, "/red"), NULL);
     color.blue = gconf_client_get_int (client,
@@ -183,12 +184,16 @@ pong_config_get_color16 (gchar *key)
 static gboolean
 check_key (gchar *key)
 {
+    int i;
+
     while (1)
     {
-        if (!pong_properties_key_name[i] == NULL) 
+        if (!pong_key_name[i] == NULL) 
         {
-            if (g_strcmp (pong_key_name[i], key, 1))
+            if (strcmp (pong_key_name[i], key) == 0)
                 return TRUE;
+            
+            i++;
         }
         else
         {

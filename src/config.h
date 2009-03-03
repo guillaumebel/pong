@@ -23,9 +23,12 @@
 #define CONFIG_H_
 
 #include <string.h>
-#include <glib/glib.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 #include <gdk/gdkkeysyms.h>
 #include <gconf/gconf-client.h>
+
+#include "color.h"
 
 #define REBOND 7
 
@@ -48,9 +51,8 @@
 #define WIN_SCORE 10
 #define DIFFICULTY 2
 
-#include "color.h"
 
-struct Config {
+typedef struct Config {
     int screen_w;
     int screen_h;
     int difficulty; //difficulty easy, medium. hard
@@ -63,7 +65,7 @@ struct Config {
     int ball_size; //tiny, normal, big
 } Config;
 
-static const char pong_key_name[] = {
+static const char* pong_key_name[] = {
     "width",
     "height",
     "difficulty",
@@ -75,12 +77,11 @@ static const char pong_key_name[] = {
     NULL
 };
 
-
-GConfClient *gconf_client = NULL;
+GConfClient *client = NULL;
 
 void pong_config_init ();
 Config* pong_config_get_stored ();
-
+void pong_config_reset_default ();
 void pong_config_set_string (gchar *key, gchar *value);
 void pong_config_set_int (gchar *key, gint value);
 void pong_config_set_float (gchar *key, gdouble value);

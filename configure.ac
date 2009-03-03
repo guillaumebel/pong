@@ -17,7 +17,11 @@ PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.10.0,,
                   AC_MSG_ERROR([GTK+-2.10 is required to compile Pong]))
 PKG_CHECK_MODULES(CLUTTER, clutter-0.8 clutter-gtk-0.8 clutter-cairo-0.8 ,,
                   AC_MSG_ERROR([clutter-0.8 is required to compile Pong]))
+PKG_CHECK_MODULES(GCONF, gconf-2.0 >= 2.0,,
+                  AC_MSG_ERROR([gconf-2.0 is required to compile Pong]))
 
+AC_SUBST(GCONF_CFLAGS)
+AC_SUBST(GCONF_LIBS)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(CLUTTER_CFLAGS)

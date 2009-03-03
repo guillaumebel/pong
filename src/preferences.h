@@ -23,6 +23,3 @@
 #include <glib/glib.h>
 #include <gdk/gdkkeysyms.h>
 
-
-
-
