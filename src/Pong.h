@@ -56,15 +56,6 @@ typedef struct PongGame {
 } PongGame;
 
 typedef struct Config {
-    int screen_w;
-    int screen_h;
-    float speed; //difficulty easy, medium. hard
-    ClutterColor *color_player1;
-    ClutterColor *color_player2;
-    ClutterColor *background_color;
-    int win_score;
-    gboolean two_player;
-    int paddle_size; //tiny, normal, big 
 
 } Config;
 

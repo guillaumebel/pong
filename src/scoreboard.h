@@ -31,7 +31,6 @@ typedef struct Scoreboard {
 } Scoreboard;
 
 
-
 Scoreboard* pong_scoreboard_new (GtkWidget *statusbar);
 
 void pong_scoreboard_update (Scoreboard *sb);

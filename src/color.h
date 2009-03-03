@@ -23,11 +23,20 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
+#include <glib.h>
+
 typedef struct PongColor {
     double red;
     double blue;
     double green;
     double alpha;
 } PongColor;
+
+typedef struct PongColor16 {
+    guint8 red;
+    guint8 blue;
+    guint8 green;
+    guint8 alpha;
+} PongColor16;
 
 #endif

@@ -22,7 +22,8 @@
 
 #include "paddle.h"
 
-Paddle* pong_paddle_new ()
+Paddle*
+pong_paddle_new ()
 {
     cairo_t *cr;
     cairo_pattern_t *pattern;
@@ -56,7 +57,8 @@ Paddle* pong_paddle_new ()
     return pad;
 }
 
-void pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop)
+void
+pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop)
 {
     cairo_t *cr;
     cairo_pattern_t *pattern;
@@ -89,12 +91,14 @@ void pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop)
     cairo_destroy (cr);
 }
 
-void pong_paddle_set_position (Paddle *p, gint x, gint y)
+void
+pong_paddle_set_position (Paddle *p, gint x, gint y)
 {
     clutter_actor_set_position (CLUTTER_ACTOR (p->actor), x, y);
 }
 
-void pong_paddle_set_size (Paddle *p, gint w, int h)
+void
+pong_paddle_set_size (Paddle *p, gint w, int h)
 {
     p->width = w;
     p->size = h;

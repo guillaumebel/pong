@@ -1,4 +1,3 @@
-Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache/
@@ -22,5 +21,6 @@ src/Makefile.in
 src/*.o
 src/pong
 *~
+*.swp
 stamp-h1
 

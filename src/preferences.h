@@ -20,28 +20,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <string.h>
+#include <glib/glib.h>
 #include <gdk/gdkkeysyms.h>
-#include <gconf/gconf-client.h>
 
-struct Preferences {
-    
-} Preferences;
 
-static const char pong_properties_key_name[] = {
-    "width",
-    "height",
-    "difficulty",
-    "player_one_color",
-    "player_two_color",
-    "background_color",
-    "paddle_size",
-    "win_score"
-}
 
-GConfClient *gconf_client = NULL;
-
-void pong_preferences_init ();
-gchar* pong_preferences_get_properties (gchar *properties, gchar *value);
-void pong_preferences_set_properties ();
 
