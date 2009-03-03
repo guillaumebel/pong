@@ -29,9 +29,7 @@
 #include <clutter/clutter.h>
 #include <clutter-cairo/clutter-cairo.h>
 
-#define DEFAULT_SCREEN_W 480
-#define DEFAULT_SCREEN_H 380
-#define BALL_R 12     // ball size
+#include "config.h"
 
 typedef struct Ball {
     ClutterActor *actor;

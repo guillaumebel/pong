@@ -50,7 +50,15 @@
 
 #define WIN_SCORE 10
 #define DIFFICULTY 2
+#define TWO_PLAYER 0
 
+#define GCONF_DIR "/apps/pong"
+#define WIDTH_KEY GCONF_DIR "/width"
+#define HEIGHT_KEY GCONF_DIR "/height"
+#define DIFFICULTY_KEY GCONF_DIR "/difficulty"
+#define WINSCORE_KEY GCONF_DIR "/win_score"
+#define PADDLESIZE_KEY GCONF_DIR "/paddle_size"
+#define TWOPLAYER_KEY GCONF_DIR "/two_player"
 
 typedef struct Config {
     int screen_w;
@@ -77,19 +85,14 @@ static const char* pong_key_name[] = {
     NULL
 };
 
-GConfClient *client = NULL;
+static GConfClient *gconf_client = NULL;
 
 void pong_config_init ();
-Config* pong_config_get_stored ();
+Config* pong_config_load ();
+void pong_config_save (Config *c);
+
 void pong_config_reset_default ();
-void pong_config_set_string (gchar *key, gchar *value);
-void pong_config_set_int (gchar *key, gint value);
-void pong_config_set_float (gchar *key, gdouble value);
-void pong_config_set_boolean (gchar *key, gboolean value);
-gchar* pong_config_get_string (gchar *key);
-gboolean pong_config_get_bool (gchar *key);
-gint pong_config_get_int (gchar *key);
-gdouble pong_config_get_float (gchar *key);
+
 PongColor pong_config_get_color (gchar *key);
 PongColor16 pong_config_get_color16 (gchar *key);
 

@@ -29,21 +29,21 @@ pong_paddle_new ()
     cairo_pattern_t *pattern;
     Paddle *pad = g_new (Paddle,1);
 
-    pad->size = PADDLE_H;
-    pad->width = PADDLE_W;
+    pad->size = PADDLE_NORMAL_H;
+    pad->width = PADDLE_NORMAL_W;
     pad->speed = 3;
 
-    pad->actor = clutter_cairo_new (PADDLE_W * 2, PADDLE_W * 2);
+    pad->actor = clutter_cairo_new (PADDLE_NORMAL_W * 2, PADDLE_NORMAL_W * 2);
     cr = clutter_cairo_create (CLUTTER_CAIRO (pad->actor));
 
     cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
     cairo_paint (cr);
     cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
 
-    cairo_rectangle (cr, 0, 0, PADDLE_W, PADDLE_H);
+    cairo_rectangle (cr, 0, 0, PADDLE_NORMAL_W, PADDLE_NORMAL_H);
     
-    pattern = cairo_pattern_create_linear (0, PADDLE_H / 2, 
-                                                PADDLE_W, PADDLE_H / 2);
+    pattern = cairo_pattern_create_linear (0, PADDLE_NORMAL_H / 2, 
+                                                PADDLE_NORMAL_W, PADDLE_NORMAL_H / 2);
 
     cairo_pattern_add_color_stop_rgba (pattern, 0.40,  0.09, 0.18, 0.33, 0.75);
     cairo_pattern_add_color_stop_rgba (pattern, 0.75,  0.25, 0.5, .85, 0.75);
@@ -69,10 +69,10 @@ pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop)
     cairo_paint (cr);
     cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
 
-    cairo_rectangle (cr, 0, 0, PADDLE_W, PADDLE_H);
+    cairo_rectangle (cr, 0, 0, PADDLE_NORMAL_W, PADDLE_NORMAL_H);
     
-    pattern = cairo_pattern_create_linear (0, PADDLE_H / 2, 
-                                                PADDLE_W, PADDLE_H / 2);
+    pattern = cairo_pattern_create_linear (0, PADDLE_NORMAL_H / 2, 
+                                                PADDLE_NORMAL_W, PADDLE_NORMAL_H / 2);
 
     cairo_pattern_add_color_stop_rgba (pattern, 0.40,  start.red, 
                                                        start.green, 

@@ -29,8 +29,7 @@
 
 #include "color.h"
 
-#define PADDLE_W 11     // paddle width
-#define PADDLE_H 70    //paddle height
+#include "config.h"
 
 typedef struct Paddle {
     ClutterActor *actor;

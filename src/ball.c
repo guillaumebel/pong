@@ -29,26 +29,26 @@ Ball* pong_ball_new ()
     Ball *b = g_new (Ball,1);
 
     b->speed = 3;
-    b->x = DEFAULT_SCREEN_W / 2;
-    b->y = DEFAULT_SCREEN_H / 2;
-    b->size = BALL_R;
+    b->x = SCREEN_W / 2;
+    b->y = SCREEN_H / 2;
+    b->size = BALL_NORMAL;
 
     srand(time(NULL));
     float dir = ((float)(rand() % 9100 - 4600) / 100) * (M_PI/180);
     b->hspeed = b->speed * cos(dir);
     b->vspeed = b->speed * sin(dir);
 
-    b->actor = clutter_cairo_new (BALL_R * 2, BALL_R * 2);
+    b->actor = clutter_cairo_new (BALL_NORMAL * 2, BALL_NORMAL * 2);
     cr = clutter_cairo_create (CLUTTER_CAIRO (b->actor));
 
     cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
     cairo_paint (cr);
     cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
 
-    cairo_arc (cr, BALL_R, BALL_R, BALL_R, 0.0, 2 * M_PI);
+    cairo_arc (cr, BALL_NORMAL, BALL_NORMAL, BALL_NORMAL, 0.0, 2 * M_PI);
 
-    pattern = cairo_pattern_create_radial (BALL_R, BALL_R, 0,
-                                                BALL_R, BALL_R, BALL_R);
+    pattern = cairo_pattern_create_radial (BALL_NORMAL, BALL_NORMAL, 0,
+                                                BALL_NORMAL, BALL_NORMAL, BALL_NORMAL);
     cairo_pattern_add_color_stop_rgba (pattern, 0, 0.88, 0.95, 0.99, 0.1);
     cairo_pattern_add_color_stop_rgba (pattern, 0.6, 0.88, 0.95, 0.99, 0.1);
     cairo_pattern_add_color_stop_rgba (pattern, 0.8, 0.67, 0.83, 0.91, 0.2);
@@ -60,7 +60,7 @@ Ball* pong_ball_new ()
 
     cairo_pattern_destroy (pattern);
 
-    pattern = cairo_pattern_create_linear (0, 0, BALL_R * 2, BALL_R * 2);
+    pattern = cairo_pattern_create_linear (0, 0, BALL_NORMAL * 2, BALL_NORMAL * 2);
     cairo_pattern_add_color_stop_rgba (pattern, 0.0, 1.0, 1.0, 1.0, 0.0);
     cairo_pattern_add_color_stop_rgba (pattern, 0.15, 1.0, 1.0, 1.0, 0.95);
     cairo_pattern_add_color_stop_rgba (pattern, 0.3, 1.0, 1.0, 1.0, 0.0);

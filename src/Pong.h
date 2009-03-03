@@ -35,7 +35,7 @@
 #include "paddle.h"
 #include "ball.h"
 
-#define REBOND 7    // rebond limit
+#include "config.h"
 
 typedef struct PongGame {
     Paddle *p1;
@@ -55,13 +55,12 @@ typedef struct PongGame {
     int screen_h;
 } PongGame;
 
-typedef struct Config {
-
-} Config;
 
 GtkWidget *window = NULL;
 ClutterTimeline *timeline = NULL;
 ClutterActor *message_label = NULL;
+
+Config* config = NULL;
 
 Scoreboard *sb = NULL;
 PongGame *game = NULL;

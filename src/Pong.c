@@ -32,14 +32,14 @@ init_game ()
     game->ball = pong_ball_new ();
     
     // Game parameters
-    game->screen_w = DEFAULT_SCREEN_W;
-    game->screen_h = DEFAULT_SCREEN_H;
+    game->screen_w = SCREEN_W;
+    game->screen_h = SCREEN_H;
     game->speed = 1.0;
 
     game->two_player = 0;
 
-    game->player1_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;
-    game->player2_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;    
+    game->player1_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;
+    game->player2_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;    
 
     game->endgame = FALSE;
     game->paused = FALSE;
@@ -169,8 +169,8 @@ end_game_cb (GtkAction * action, gpointer data)
     pong_ball_set_position (game->ball, game->screen_w / 2, game->screen_h /2);
     pong_scoreboard_clear (sb);
     
-    game->player1_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;
-    game->player2_y = DEFAULT_SCREEN_H / 2 - PADDLE_H / 2;   
+    game->player1_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;
+    game->player2_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;   
 
     pong_paddle_set_position (game->p1, 6, game->player1_y);
     pong_paddle_set_position (game->p2, game->screen_w - 10, game->player2_y);
@@ -375,7 +375,7 @@ main (int argc, char **argv)
     ClutterActor *stage = NULL;
     ClutterColor stage_color = {0x01, 0x05, 0x1e, 0xff};
     //ClutterColor actor_color = {0x50, 0x85, 0xfe, 0xff};
-    ClutterColor label_color = {0xff, 0x00, 0x00, 0xff};
+    ClutterColor label_color = {0xFF, 0xFF, 0xFF, 0xff};
     
     //Gtk declaration
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -414,6 +414,10 @@ main (int argc, char **argv)
     };
     
     init_game ();
+
+    pong_config_init ();
+
+    config = pong_config_load ();
 
     action_group = gtk_action_group_new ("group");
 
