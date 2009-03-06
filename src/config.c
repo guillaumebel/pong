@@ -62,9 +62,8 @@ pong_config_init ()
         else 
         {
             pong_config_reset_default ();
-        }
-    }
-                          
+        }   
+    }                      
 }
 
 void
@@ -93,13 +92,18 @@ pong_config_reset_default ()
     gconf_client_set_int (gconf_client,
                           PADDLESIZE_KEY,
                           2,
-                          NULL); 
+                          NULL);
+    gconf_client_set_int (gconf_client,
+                          BALLSIZE_KEY,
+                          2,
+                          NULL);
 }
 
 Config*
 pong_config_load ()
 {
     Config *c = g_new (Config,1);
+
     c->screen_w = gconf_client_get_int (gconf_client,
                           WIDTH_KEY, NULL);
     c->screen_h = gconf_client_get_int (gconf_client,
@@ -112,7 +116,8 @@ pong_config_load ()
                           TWOPLAYER_KEY, NULL);
     c->paddle_size = gconf_client_get_int (gconf_client,
                           PADDLESIZE_KEY, NULL);
-                          
+    c->ball_size = gconf_client_get_int (gconf_client,
+                          BALLSIZE_KEY, NULL);
     return c;
 }
 
@@ -142,7 +147,11 @@ pong_config_save (Config *c)
     gconf_client_set_int (gconf_client,
                           PADDLESIZE_KEY,
                           c->paddle_size,
-                          NULL);               
+                          NULL);
+    gconf_client_set_int (gconf_client,
+                          BALLSIZE_KEY,
+                          c->ball_size,
+                          NULL);
 
 }
 

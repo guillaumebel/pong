@@ -41,10 +41,16 @@ typedef struct Ball {
     int size;
 } Ball;
 
+static ClutterTimeline *explode_tl = NULL;
+static ClutterEffectTemplate *explode_eff = NULL;
+
 Ball* pong_ball_new ();
 
 void pong_ball_set_position (Ball *p, gint x, gint y);
 
 void pong_ball_set_size (Ball *p, gint r);
+
+void pong_ball_explode (Ball *p);
+
 
 #endif

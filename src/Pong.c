@@ -25,18 +25,38 @@
 static void
 init_game () 
 {
-    // struct init
     game = g_new (PongGame, 1);    
     game->p1 = pong_paddle_new ();
     game->p2 = pong_paddle_new ();
     game->ball = pong_ball_new ();
-    
-    // Game parameters
-    game->screen_w = SCREEN_W;
-    game->screen_h = SCREEN_H;
-    game->speed = 1.0;
 
-    game->two_player = 0;
+    switch (config->paddle_size) 
+    {
+        case 1:
+            pong_paddle_set_size (game->p1, PADDLE_TINY_W, PADDLE_TINY_H);
+            pong_paddle_set_size (game->p2, PADDLE_TINY_W, PADDLE_TINY_H);
+            break;
+        case 3:
+            pong_paddle_set_size (game->p1, PADDLE_BIG_W, PADDLE_BIG_H);
+            pong_paddle_set_size (game->p1, PADDLE_BIG_W, PADDLE_BIG_H);
+            break;
+        default:
+            break;
+    }
+    
+    switch (config->ball_size)
+    {
+        case 1:
+            pong_ball_set_size (game->ball, BALL_TINY);
+            break;
+        case 3:
+            pong_ball_set_size (game->ball, BALL_BIG);
+            break;
+        default:
+            break;
+    }
+
+    game->speed = 1.0;
 
     game->player1_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;
     game->player2_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;    
@@ -62,9 +82,9 @@ static void
 message_label_show (gchar *message) 
 {    
     clutter_label_set_text (CLUTTER_LABEL (message_label), message);
-    clutter_actor_set_position (message_label, (game->screen_w / 2) 
+    clutter_actor_set_position (message_label, (config->screen_w / 2) 
                 - (clutter_actor_get_width (CLUTTER_ACTOR (message_label)) / 2),
-                (game->screen_h / 2)
+                (config->screen_h / 2)
                 - (clutter_actor_get_height (CLUTTER_ACTOR (message_label)) / 2));
     clutter_actor_show (message_label);
 }
@@ -166,14 +186,14 @@ show_scores_cb (GtkAction * action, gpointer data)
 static gint
 end_game_cb (GtkAction * action, gpointer data)
 {
-    pong_ball_set_position (game->ball, game->screen_w / 2, game->screen_h /2);
+    pong_ball_set_position (game->ball, config->screen_w / 2, config->screen_h /2);
     pong_scoreboard_clear (sb);
     
     game->player1_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;
     game->player2_y = SCREEN_H / 2 - PADDLE_NORMAL_H / 2;   
 
     pong_paddle_set_position (game->p1, 6, game->player1_y);
-    pong_paddle_set_position (game->p2, game->screen_w - 10, game->player2_y);
+    pong_paddle_set_position (game->p2, config->screen_w - 10, game->player2_y);
 
     clutter_actor_hide (message_label);
     game->paused = FALSE;
@@ -188,8 +208,8 @@ pong_preferences_cb (GtkAction * action, gpointer data)
 
 void window_resize_cb (GtkWidget *widget, GtkRequisition *req, gpointer data) 
 {   
-    gtk_window_get_size (GTK_WINDOW (window), &game->screen_w, &game->screen_h);
-    clutter_actor_set_size ((ClutterActor*)data, game->screen_w, game->screen_h);
+    gtk_window_get_size (GTK_WINDOW (window), &config->screen_w, &config->screen_h);
+    clutter_actor_set_size ((ClutterActor*)data, config->screen_w, config->screen_h);
 }
 
 void
@@ -203,11 +223,11 @@ on_timeline_new_frame (ClutterTimeline *timeline, gint frame_num, gpointer data)
         
     //Check collision with walls
     if (game->ball->y <= game->ball->size \
-        || game->ball->y >= game->screen_h - game->ball->size) 
+        || game->ball->y >= config->screen_h - game->ball->size) 
     {
         game->ball->vspeed = -game->ball->vspeed;
-        game->ball->y = (game->ball->y > game->screen_h / 2 
-                  ? game->screen_h - (game->ball->size * 2) : game->ball->size * 2);
+        game->ball->y = (game->ball->y > config->screen_h / 2 
+                  ? config->screen_h - (game->ball->size * 2) : game->ball->size * 2);
     }
     
     //collision with paddles
@@ -229,8 +249,8 @@ on_timeline_new_frame (ClutterTimeline *timeline, gint frame_num, gpointer data)
         game->ball->x += game->ball->hspeed;
     }
     
-    if (game->ball->x >= game->screen_w - (REBOND + game->p2->width * 2 - 1) 
-        && game->ball->x <= game->screen_w - REBOND 
+    if (game->ball->x >= config->screen_w - (REBOND + game->p2->width * 2 - 1) 
+        && game->ball->x <= config->screen_w - REBOND 
         && game->ball->y >= game->player2_y - game->p2->size / 2
         && game->ball->y <= game->player2_y + game->p2->size)
     {
@@ -252,26 +272,26 @@ on_timeline_new_frame (ClutterTimeline *timeline, gint frame_num, gpointer data)
     {
         sb->score_p2++;
         pong_scoreboard_update (sb);
-        game->ball->x = game->screen_w / 2;
-        game->ball->y = game->screen_h / 2;
+        game->ball->x = config->screen_w / 2;
+        game->ball->y = config->screen_h / 2;
     }
     
-    if (game->ball->x >= game->screen_w - 4) 
+    if (game->ball->x >= config->screen_w - 4) 
     {
         sb->score_p1++;
         pong_scoreboard_update (sb);
-        game->ball->x = game->screen_w / 2;
-        game->ball->y = game->screen_h / 2;
+        game->ball->x = config->screen_w / 2;
+        game->ball->y = config->screen_h / 2;
     }
     
     // AI
-    if (!game->two_player) 
+    if (!config->two_player) 
     {
-        if (game->ball->hspeed > 0 && game->ball->x >= (game->screen_h - game->screen_w / 4 
+        if (game->ball->hspeed > 0 && game->ball->x >= (config->screen_h - config->screen_w / 4 
             * (game->ball->hspeed / game->ball->speed)))
         {
             if (game->ball->y > (game->player2_y + game->p2->size / 2) 
-                && game->player2_y < (game->screen_h - game->p2->size / 2)) 
+                && game->player2_y < (config->screen_h - game->p2->size / 2)) 
             {
                 game->player2_y += game->p1->speed;
             } 
@@ -289,7 +309,7 @@ on_timeline_new_frame (ClutterTimeline *timeline, gint frame_num, gpointer data)
     pong_ball_set_position (game->ball, 
                                 game->ball->x, game->ball->y);
     pong_paddle_set_position (game->p2, 
-                                game->screen_w - 10, game->player2_y);
+                                config->screen_w - 10, game->player2_y);
 }
 
 static gboolean
@@ -326,13 +346,13 @@ key_press_cb (ClutterActor *actor, ClutterEvent *event, gpointer data)
             pong_paddle_set_position (game->p1, 6, game->player1_y);
         }
         if (GDK_Down == event->key.keyval 
-            && game->player1_y <= (game->screen_h - game->p1->size))
+            && game->player1_y <= (config->screen_h - game->p1->size))
         {
             game->player1_y += game->p1->speed * 3;
             pong_paddle_set_position (game->p1, 6, game->player1_y);
         }
 
-        if (game->two_player)
+        if (config->two_player)
         {
             if (GDK_a == event->key.keyval && game->player2_y >= 1)
             {
@@ -340,7 +360,7 @@ key_press_cb (ClutterActor *actor, ClutterEvent *event, gpointer data)
                 pong_paddle_set_position (game->p2, 6, game->player2_y);
             }
             if (GDK_z == event->key.keyval 
-                && game->player1_y <= (game->screen_h - game->p2->size))
+                && game->player1_y <= (config->screen_h - game->p2->size))
             {
                 game->player2_y += game->p2->speed * 3;
                 pong_paddle_set_position (game->p2, 6, game->player2_y);
@@ -355,7 +375,7 @@ on_stage_motion_event_cb (ClutterActor *actor, ClutterEvent *event, gpointer dat
 {
     ClutterMotionEvent *mev = (ClutterMotionEvent *)event;
 
-    if (game->player1_y >= 1 && game->player1_y <= (game->screen_h - game->p1->size))
+    if (game->player1_y >= 1 && game->player1_y <= (config->screen_h - game->p1->size))
     {
         game->player1_y = mev->y;
         pong_paddle_set_position (game->p1, 6, mev->y);
@@ -374,14 +394,14 @@ main (int argc, char **argv)
     ClutterActor *background = NULL;
     ClutterActor *stage = NULL;
     ClutterColor stage_color = {0x01, 0x05, 0x1e, 0xff};
-    //ClutterColor actor_color = {0x50, 0x85, 0xfe, 0xff};
     ClutterColor label_color = {0xFF, 0xFF, 0xFF, 0xff};
-    
+
     //Gtk declaration
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     GtkWidget *vbox = gtk_vbox_new (FALSE,6);
     GtkWidget *clutter_widget = gtk_clutter_embed_new ();    
     GtkWidget *statusbar = gtk_statusbar_new ();
+
     // Menu stuff
     GtkWidget *menubar;
     GtkUIManager *ui_manager = gtk_ui_manager_new ();
@@ -412,12 +432,12 @@ main (int argc, char **argv)
         G_CALLBACK (pong_preferences_cb)},
         {"About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (about_cb)}
     };
-    
-    init_game ();
 
     pong_config_init ();
 
     config = pong_config_load ();
+
+    init_game ();
 
     action_group = gtk_action_group_new ("group");
 
@@ -430,7 +450,7 @@ main (int argc, char **argv)
     // some more gtk stuff
     gtk_window_set_title (GTK_WINDOW (window), "Pong!");
 
-    gtk_window_set_default_size (GTK_WINDOW (window), game->screen_w, game->screen_h + 50);
+    gtk_window_set_default_size (GTK_WINDOW (window), config->screen_w, config->screen_h + 50);
 
     accel_group = gtk_ui_manager_get_accel_group (ui_manager);
     gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
@@ -462,7 +482,7 @@ main (int argc, char **argv)
     
     background = clutter_texture_new_from_file ("back2.png",NULL);
     clutter_actor_set_position (background, 0, 0);
-    clutter_actor_set_size (background, game->screen_w, game->screen_h);
+    clutter_actor_set_size (background, config->screen_w, config->screen_h);
 
     clutter_actor_set_opacity (background, 0xA9);
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), background);
@@ -493,7 +513,7 @@ main (int argc, char **argv)
     //Paddle 2
     pong_paddle_set_size (game->p2, 
                             game->p2->width, game->p2->size);
-    pong_paddle_set_position (game->p2, game->screen_w - 10, game->player2_y);
+    pong_paddle_set_position (game->p2, config->screen_w - 10, game->player2_y);
 
 
     pong_paddle_set_color (game->p2, start, stop);

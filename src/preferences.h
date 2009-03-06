@@ -23,3 +23,5 @@
 #include <glib/glib.h>
 #include <gdk/gdkkeysyms.h>
 
+
+static gint pong_preferences_cb (GtkAction * action, gpointer data);

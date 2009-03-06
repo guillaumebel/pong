@@ -20,8 +20,36 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-void
-pong_preferences_window_init (GtkWidget *window)
+static gint
+pong_preferences_cb (GtkAction * action, gpointer data)
 {
+    GtkWidget *window;
+    GtkWidget *vbox1;
+    GtkWidget *vbox2;
+    GtkWidget *vbox3;
+    GtkWidget *label1;
+    GtkWidget *label2;
+    GtkWidget *label3;
+
+    GtkWidget *notebook;
+
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    notebook = gtk_notebook_new ();
+
     
-}
+
+    label1 = gtk_label_new ("General");
+    label2 = gtk_label_new ("Player one");
+    label3 = gtk_label_new ("player two");
+
+    gtk_notebook_append_page (notebook, vbox1, label1);
+    gtk_notebook_append_page (notebook, vbox2, label2);
+    gtk_notebook_append_page (notebook. vbox3, label3);
+
+
+    gtk_container_add (GTK_CONTAINER (window), notebook);
+    
+    vbox = gtk_vbox_new (TRUE, 6);
+
+    return 0;
+}  

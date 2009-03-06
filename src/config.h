@@ -59,6 +59,7 @@
 #define WINSCORE_KEY GCONF_DIR "/win_score"
 #define PADDLESIZE_KEY GCONF_DIR "/paddle_size"
 #define TWOPLAYER_KEY GCONF_DIR "/two_player"
+#define BALLSIZE_KEY GCONF_DIR "/ball_size"
 
 typedef struct Config {
     int screen_w;
@@ -82,6 +83,7 @@ static const char* pong_key_name[] = {
     "background_color",
     "paddle_size",
     "win_score",
+    "ball_size",
     NULL
 };
 
