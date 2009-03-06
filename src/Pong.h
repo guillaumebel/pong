@@ -56,14 +56,14 @@ typedef struct PongGame {
 } PongGame;
 
 
-GtkWidget *window = NULL;
-ClutterTimeline *timeline = NULL;
-ClutterActor *message_label = NULL;
+static GtkWidget *window = NULL;
+static ClutterTimeline *timeline = NULL;
+static ClutterActor *message_label = NULL;
 
-Config* config = NULL;
+static Config* config = NULL;
 
-Scoreboard *sb = NULL;
-PongGame *game = NULL;
+static Scoreboard *sb = NULL;
+static PongGame *game = NULL;
 
 static GtkAction *fullscreen_action;
 

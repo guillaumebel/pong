@@ -206,13 +206,14 @@ pong_preferences_cb (GtkAction * action, gpointer data)
     return 0;
 }  
 
-void window_resize_cb (GtkWidget *widget, GtkRequisition *req, gpointer data) 
+static void 
+window_resize_cb (GtkWidget *widget, GtkRequisition *req, gpointer data) 
 {   
     gtk_window_get_size (GTK_WINDOW (window), &config->screen_w, &config->screen_h);
     clutter_actor_set_size ((ClutterActor*)data, config->screen_w, config->screen_h);
 }
 
-void
+static void
 on_timeline_new_frame (ClutterTimeline *timeline, gint frame_num, gpointer data)
 {    
     if (game->endgame) 
