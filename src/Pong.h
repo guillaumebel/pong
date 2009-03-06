@@ -37,6 +37,8 @@
 
 #include "config.h"
 
+#include "preferences.h"
+
 typedef struct PongGame {
     Paddle *p1;
     Paddle *p2;
@@ -45,14 +47,10 @@ typedef struct PongGame {
     int player1_y; 
     int player2_y; 
     
-    int two_player;
     float speed;
 
     int endgame;
     gboolean paused;
-    
-    int screen_w;
-    int screen_h;
 } PongGame;
 
 
@@ -93,5 +91,6 @@ static const char ui_description[] =
   "    </menu>" 
   "  </menubar>" 
   "</ui>";
-  
-  #endif
+ 
+
+#endif

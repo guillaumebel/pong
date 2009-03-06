@@ -200,12 +200,6 @@ end_game_cb (GtkAction * action, gpointer data)
     return game->endgame = TRUE;
 }
 
-static gint
-pong_preferences_cb (GtkAction * action, gpointer data)
-{
-    return 0;
-}  
-
 static void 
 window_resize_cb (GtkWidget *widget, GtkRequisition *req, gpointer data) 
 {   
@@ -390,6 +384,13 @@ main (int argc, char **argv)
 {
 
     gtk_clutter_init (&argc, &argv);
+
+    if (config == NULL)
+    {
+        pong_config_init ();
+        config = pong_config_load ();
+    }
+    init_game ();
     
     //Clutter declaration
     ClutterActor *background = NULL;
@@ -433,12 +434,6 @@ main (int argc, char **argv)
         G_CALLBACK (pong_preferences_cb)},
         {"About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK (about_cb)}
     };
-
-    pong_config_init ();
-
-    config = pong_config_load ();
-
-    init_game ();
 
     action_group = gtk_action_group_new ("group");
 

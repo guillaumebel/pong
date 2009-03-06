@@ -20,8 +20,15 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <glib/glib.h>
-#include <gdk/gdkkeysyms.h>
+#ifndef PREFERENCES_H_
+#define PREFERENCES_H_
+
+#include <gtk/gtk.h>
+#include "Pong.h"
 
 
-static gint pong_preferences_cb (GtkAction * action, gpointer data);
+static GtkWidget *pref_dialog;
+
+gint pong_preferences_cb (GtkAction * action, gpointer data);
+
+#endif
