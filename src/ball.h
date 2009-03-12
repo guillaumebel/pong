@@ -29,7 +29,7 @@
 #include <clutter/clutter.h>
 #include <clutter-cairo/clutter-cairo.h>
 
-#include "config.h"
+#include "properties.h"
 
 typedef struct Ball {
     ClutterActor *actor;

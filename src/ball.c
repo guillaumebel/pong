@@ -120,6 +120,10 @@ pong_ball_explode (Ball *p)
 static void
 explode_end (ClutterTimeline *tl, gpointer data)
 {
-    g_free(data);
-    g_free(tl);
+    Ball *tmp = (Ball *)data;
+    clutter_actor_set_opacity (CLUTTER_ACTOR (tmp->actor), 0xff);
+    pong_ball_set_size(tmp, tmp->size);
+    
+    //g_free (tmp);
+    //g_free (tl);
 }

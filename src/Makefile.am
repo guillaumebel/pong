@@ -10,7 +10,7 @@ pong_SOURCES = Pong.c \
                paddle.c \
                ball.c \
                scoreboard.c \
-			   config.c \
+			   properties.c \
 			   preferences.c
                
 pong_LDADD = $(GTK_LIBS) \

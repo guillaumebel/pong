@@ -20,7 +20,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
+#include "properties.h"
 
 static gboolean check_key (gchar *key);
 
@@ -62,8 +62,9 @@ pong_config_init ()
         else 
         {
             pong_config_reset_default ();
-        }   
-    }                      
+        }  
+
+    }   
 }
 
 void

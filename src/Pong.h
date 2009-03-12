@@ -35,7 +35,7 @@
 #include "paddle.h"
 #include "ball.h"
 
-#include "config.h"
+#include "properties.h"
 
 #include "preferences.h"
 

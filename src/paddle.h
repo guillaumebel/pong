@@ -29,7 +29,7 @@
 
 #include "color.h"
 
-#include "config.h"
+#include "properties.h"
 
 typedef struct Paddle {
     ClutterActor *actor;
