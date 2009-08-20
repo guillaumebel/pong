@@ -27,8 +27,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include <clutter/clutter.h>
-#include <clutter-cairo/clutter-cairo.h>
-#include <clutter-gtk/gtk-clutter-embed.h>
+#include <clutter-gtk/clutter-gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "scoreboard.h"

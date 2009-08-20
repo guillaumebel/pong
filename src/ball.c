@@ -22,7 +22,6 @@
 
 #include "ball.h"
 
-static void explode_end (ClutterTimeline *timeline, gpointer data);
 
 Ball* pong_ball_new ()
 {
@@ -94,36 +93,3 @@ void pong_ball_set_size (Ball *b, gint r)
     clutter_actor_set_size (CLUTTER_ACTOR (b->actor), r, r);
 }
 
-void 
-pong_ball_explode (Ball *p)
-{
-    
-    if (!explode_tl)
-        explode_tl = clutter_timeline_new_for_duration (360);
-    if (!explode_eff)
-        explode_eff = clutter_effect_template_new (explode_tl, CLUTTER_ALPHA_SINE_INC);
-    
-    clutter_effect_fade (explode_eff, p->actor, 0, NULL, NULL);
-    clutter_effect_move (explode_eff, p->actor, 
-                            p->x + g_random_int_range (-60 - p->size / 4, 60),
-                            p->y + g_random_int_range (-60 - p->size / 4, 60),
-                            NULL, NULL);
-    clutter_effect_scale (explode_eff, p->actor, 1.5, 1.5, NULL, NULL);
-
-    
-    clutter_timeline_start (explode_tl);
-
-    g_signal_connect (explode_tl, "completed",
-                        G_CALLBACK (explode_end), p);
-}
-
-static void
-explode_end (ClutterTimeline *tl, gpointer data)
-{
-    Ball *tmp = (Ball *)data;
-    clutter_actor_set_opacity (CLUTTER_ACTOR (tmp->actor), 0xff);
-    pong_ball_set_size(tmp, tmp->size);
-    
-    //g_free (tmp);
-    //g_free (tl);
-}

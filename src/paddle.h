@@ -25,7 +25,6 @@
 
 #include <gtk/gtk.h>
 #include <clutter/clutter.h>
-#include <clutter-cairo/clutter-cairo.h>
 
 #include "color.h"
 

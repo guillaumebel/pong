@@ -27,7 +27,6 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include <clutter/clutter.h>
-#include <clutter-cairo/clutter-cairo.h>
 
 #include "properties.h"
 
@@ -42,7 +41,6 @@ typedef struct Ball {
 } Ball;
 
 static ClutterTimeline *explode_tl = NULL;
-static ClutterEffectTemplate *explode_eff = NULL;
 
 Ball* pong_ball_new ();
 

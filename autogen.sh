@@ -23,19 +23,25 @@ FORBIDDEN_M4MACROS=${FORBIDDEN_M4MACROS:-}
 
 # Not all echo versions allow -n, so we check what is possible. This test is
 # based on the one in autoconf.
-case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
-  *c*,-n*) ECHO_N= ;;
-  *c*,*  ) ECHO_N=-n ;;
-  *)       ECHO_N= ;;
+ECHO_C=
+ECHO_N=
+case `echo -n x` in
+-n*)
+  case `echo 'x\c'` in
+  *c*) ;;
+  *)   ECHO_C='\c';;
+  esac;;
+*)
+  ECHO_N='-n';;
 esac
 
 # some terminal codes ...
 boldface="`tput bold 2>/dev/null`"
 normal="`tput sgr0 2>/dev/null`"
 printbold() {
-    echo $ECHO_N "$boldface"
+    echo $ECHO_N "$boldface" $ECHO_C
     echo "$@"
-    echo $ECHO_N "$normal"
+    echo $ECHO_N "$normal" $ECHO_C
 }    
 printerr() {
     echo "$@" >&2
@@ -85,7 +91,7 @@ version_check() {
     fi
     printbold "checking for $vc_package $vc_comparator $vc_min_version..."
     for vc_checkprog in $vc_checkprogs; do
-	echo $ECHO_N "  testing $vc_checkprog... "
+	echo $ECHO_N "  testing $vc_checkprog... " $ECHO_C
 	if $vc_checkprog --version < /dev/null > /dev/null 2>&1; then
 	    vc_actual_version=`$vc_checkprog --version | head -n 1 | \
                                sed 's/^.*[ 	]\([0-9.]*[a-z]*\).*$/\1/'`
@@ -109,6 +115,7 @@ version_check() {
 	printerr "  from your distribution or get the source tarball at"
         printerr "    $vc_source"
 	printerr
+	exit $vc_status
     fi
     return $vc_status
 }
@@ -215,7 +222,7 @@ check_m4macros() {
     fi
     if [ "$cm_status" != 0 ]; then
         print_m4macros_error
-        return $cm_status
+        exit $cm_status
     fi
     if [ -n "$FORBIDDEN_M4MACROS" ]; then
 	printbold "Checking for forbidden M4 macros..."
@@ -236,8 +243,8 @@ check_m4macros() {
     fi
     if [ "$cm_status" != 0 ]; then
         print_m4macros_error
+	exit $cm_status
     fi
-    return $cm_status
 }
 
 # try to catch the case where the macros2/ directory hasn't been cleared out.
@@ -294,81 +301,76 @@ for configure_ac in $configure_files; do
     fi
 done
 
-DIE=0
-
 #tell Mandrake autoconf wrapper we want autoconf 2.5x, not 2.13
 WANT_AUTOCONF_2_5=1
 export WANT_AUTOCONF_2_5
 version_check autoconf AUTOCONF 'autoconf2.50 autoconf autoconf-2.53' $REQUIRED_AUTOCONF_VERSION \
-    "http://ftp.gnu.org/pub/gnu/autoconf/autoconf-$REQUIRED_AUTOCONF_VERSION.tar.gz" || DIE=1
+    "http://ftp.gnu.org/pub/gnu/autoconf/autoconf-$REQUIRED_AUTOCONF_VERSION.tar.gz"
 AUTOHEADER=`echo $AUTOCONF | sed s/autoconf/autoheader/`
 
 case $REQUIRED_AUTOMAKE_VERSION in
     1.4*) automake_progs="automake-1.4" ;;
-    1.5*) automake_progs="automake-1.10 automake-1.9 automake-1.8 automake-1.7 automake-1.6 automake-1.5" ;;
-    1.6*) automake_progs="automake-1.10 automake-1.9 automake-1.8 automake-1.7 automake-1.6" ;;
-    1.7*) automake_progs="automake-1.10 automake-1.9 automake-1.8 automake-1.7" ;;
-    1.8*) automake_progs="automake-1.10 automake-1.9 automake-1.8" ;;
-    1.9*) automake_progs="automake-1.10 automake-1.9" ;;
-    1.10*) automake_progs="automake-1.10" ;;
+    1.5*) automake_progs="automake-1.11 automake-1.10 automake-1.9 automake-1.8 automake-1.7 automake-1.6 automake-1.5" ;;
+    1.6*) automake_progs="automake-1.11 automake-1.10 automake-1.9 automake-1.8 automake-1.7 automake-1.6" ;;
+    1.7*) automake_progs="automake-1.11 automake-1.10 automake-1.9 automake-1.8 automake-1.7" ;;
+    1.8*) automake_progs="automake-1.11 automake-1.10 automake-1.9 automake-1.8" ;;
+    1.9*) automake_progs="automake-1.11 automake-1.10 automake-1.9" ;;
+    1.10*) automake_progs="automake-1.11 automake-1.10" ;;
+    1.11*) automake_progs="automake-1.11" ;;
 esac
 version_check automake AUTOMAKE "$automake_progs" $REQUIRED_AUTOMAKE_VERSION \
-    "http://ftp.gnu.org/pub/gnu/automake/automake-$REQUIRED_AUTOMAKE_VERSION.tar.gz" || DIE=1
+    "http://ftp.gnu.org/pub/gnu/automake/automake-$REQUIRED_AUTOMAKE_VERSION.tar.gz"
 ACLOCAL=`echo $AUTOMAKE | sed s/automake/aclocal/`
 
 if $want_libtool; then
     version_check libtool LIBTOOLIZE libtoolize $REQUIRED_LIBTOOL_VERSION \
-        "http://ftp.gnu.org/pub/gnu/libtool/libtool-$REQUIRED_LIBTOOL_VERSION.tar.gz" || DIE=1
+        "http://ftp.gnu.org/pub/gnu/libtool/libtool-$REQUIRED_LIBTOOL_VERSION.tar.gz"
     require_m4macro libtool.m4
 fi
 
 if $want_gettext; then
     version_check gettext GETTEXTIZE gettextize $REQUIRED_GETTEXT_VERSION \
-        "http://ftp.gnu.org/pub/gnu/gettext/gettext-$REQUIRED_GETTEXT_VERSION.tar.gz" || DIE=1
+        "http://ftp.gnu.org/pub/gnu/gettext/gettext-$REQUIRED_GETTEXT_VERSION.tar.gz"
     require_m4macro gettext.m4
 fi
 
 if $want_glib_gettext; then
     version_check glib-gettext GLIB_GETTEXTIZE glib-gettextize $REQUIRED_GLIB_GETTEXT_VERSION \
-        "ftp://ftp.gtk.org/pub/gtk/v2.2/glib-$REQUIRED_GLIB_GETTEXT_VERSION.tar.gz" || DIE=1
+        "ftp://ftp.gtk.org/pub/gtk/v2.2/glib-$REQUIRED_GLIB_GETTEXT_VERSION.tar.gz"
     require_m4macro glib-gettext.m4
 fi
 
 if $want_intltool; then
     version_check intltool INTLTOOLIZE intltoolize $REQUIRED_INTLTOOL_VERSION \
-        "http://ftp.gnome.org/pub/GNOME/sources/intltool/" || DIE=1
+        "http://ftp.gnome.org/pub/GNOME/sources/intltool/"
     require_m4macro intltool.m4
 fi
 
 if $want_pkg_config; then
     version_check pkg-config PKG_CONFIG pkg-config $REQUIRED_PKG_CONFIG_VERSION \
-        "'http://www.freedesktop.org/software/pkgconfig/releases/pkgconfig-$REQUIRED_PKG_CONFIG_VERSION.tar.gz" || DIE=1
+        "'http://www.freedesktop.org/software/pkgconfig/releases/pkgconfig-$REQUIRED_PKG_CONFIG_VERSION.tar.gz"
     require_m4macro pkg.m4
 fi
 
 if $want_gtk_doc; then
     version_check gtk-doc GTKDOCIZE gtkdocize $REQUIRED_GTK_DOC_VERSION \
-        "http://ftp.gnome.org/pub/GNOME/sources/gtk-doc/" || DIE=1
+        "http://ftp.gnome.org/pub/GNOME/sources/gtk-doc/"
     require_m4macro gtk-doc.m4
 fi
 
 if $want_gnome_doc_utils; then
     version_check gnome-doc-utils GNOME_DOC_PREPARE gnome-doc-prepare $REQUIRED_GNOME_DOC_UTILS_VERSION \
-        "http://ftp.gnome.org/pub/GNOME/sources/gnome-doc-utils/" || DIE=1
+        "http://ftp.gnome.org/pub/GNOME/sources/gnome-doc-utils/"
 fi
 
 if [ "x$USE_COMMON_DOC_BUILD" = "xyes" ]; then
     version_check gnome-common DOC_COMMON gnome-doc-common \
-        $REQUIRED_DOC_COMMON_VERSION " " || DIE=1
+        $REQUIRED_DOC_COMMON_VERSION " "
 fi
 
-check_m4macros || DIE=1
+check_m4macros
 
-if [ "$DIE" -eq 1 ]; then
-  exit 1
-fi
-
-if [ "$#" = 0 ]; then
+if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
   printerr "**Warning**: I am going to run \`configure' with no arguments."
   printerr "If you wish to pass any to it, please specify them on the"
   printerr \`$0\'" command line."

@@ -504,7 +504,6 @@ main (int argc, char **argv)
     
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
                                          game->p1->actor);
-    clutter_actor_show (game->p1->actor);
 
     //Paddle 2
     pong_paddle_set_size (game->p2, 
@@ -515,21 +514,19 @@ main (int argc, char **argv)
     pong_paddle_set_color (game->p2, start, stop);
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
                                          game->p2->actor);
-    clutter_actor_show (game->p2->actor);
     
     //ball
     pong_ball_set_size (game->ball, game->ball->size);
     pong_ball_set_position (game->ball, 
                                 game->ball->x, game->ball->y);
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), game->ball->actor);
-    clutter_actor_show (game->ball->actor);
     
     //message label
     message_label = clutter_label_new_full ("Sans 26","", &label_color);
     clutter_container_add_actor (CLUTTER_CONTAINER (stage), message_label);
 
     //timeline
-    timeline = clutter_timeline_new (10 , 120);
+    timeline = clutter_timeline_new (120);
     clutter_timeline_set_loop(timeline, TRUE); 
 
     //callback connect
