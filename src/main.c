@@ -34,9 +34,12 @@
 #include "preferences.h"
 #include "properties.h"
 
+static gboolean main_loop (gpointer data);
+
 GtkWidget *window;
 PongProperties *properties;
 PongGame *game;
+gint main_id;
 
 static Scoreboard *sb = NULL;
 
@@ -72,7 +75,8 @@ static const char ui_description[] =
 static void
 start_game ()
 {
-
+  main_id = g_timeout_add (10,
+                           (GSourceFunc) main_loop, NULL);
 }
 
 static void
@@ -186,8 +190,8 @@ window_resize_cb (GtkWidget *widget, GtkRequisition *req, gpointer data)
 	clutter_actor_set_size ((ClutterActor*)data, properties->screen_w, properties->screen_h);
 }
 
-static void
-main_loop (void)
+static gboolean
+main_loop (gpointer data)
 {	
 	if (game->endgame) 
 		return;
