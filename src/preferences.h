@@ -24,8 +24,6 @@
 #define PREFERENCES_H_
 
 #include <gtk/gtk.h>
-#include "Pong.h"
-
 
 static GtkWidget *pref_dialog;
 

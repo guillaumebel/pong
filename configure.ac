@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.50])
 AC_INIT([pong], [0.1], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([src/Pong.c])
+AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.

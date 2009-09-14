@@ -19,24 +19,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+ 
+#ifndef PONG_H_
+#define PONG_H_
 
-#ifndef COLOR_H_
-#define COLOR_H_
+#include <gdk/gdk.h>
+#include "preferences.h"
+#include "ball.h"
+#include "paddle.h"
 
-#include <glib.h>
+typedef struct PongGame {
+  PongPaddle *p1;
+  PongPaddle *p2;
+  PongBall *ball;
+  gint player1_y; 
+  gint player2_y; 
+  gfloat speed;
+  gint endgame;
+  gboolean paused;
+} PongGame;
 
-typedef struct PongColor {
-    double red;
-    double blue;
-    double green;
-    double alpha;
-} PongColor;
-
-typedef struct PongColor16 {
-    guint8 red;
-    guint8 blue;
-    guint8 green;
-    guint8 alpha;
-} PongColor16;
+void pong_init (void);
 
 #endif

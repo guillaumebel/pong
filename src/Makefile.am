@@ -7,12 +7,13 @@ INCLUDES = \
 	$(GCONF_CFLAGS)
 	
 bin_PROGRAMS = pong
-pong_SOURCES = Pong.c \
+pong_SOURCES = pong.c \
                paddle.c \
                ball.c \
                scoreboard.c \
 			   			 properties.c \
-			   			 preferences.c
+			   			 preferences.c \
+							 main.c
                
 pong_LDADD = $(GTK_LIBS) \
 						 $(CLUTTER_LIBS) \

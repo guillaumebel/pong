@@ -23,26 +23,21 @@
 #ifndef PADDLE_H_
 #define PADDLE_H_
 
-#include <gtk/gtk.h>
 #include <clutter/clutter.h>
-
-#include "color.h"
-
 #include "properties.h"
 
-typedef struct Paddle {
-    ClutterActor *actor;
-    int size;
-    int width;
-    int speed;
-} Paddle;
+typedef struct PongPaddle {
+  ClutterActor *actor;
+  gint size;
+  gint width;
+  gint speed;
+  gint number;
+} PongPaddle;
 
-Paddle* pong_paddle_new ();
+PongPaddle* pong_paddle_new ();
 
-void pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop);
+void pong_paddle_set_position (PongPaddle *p, gfloat x, gfloat y);
 
-void pong_paddle_set_position (Paddle *p, gint x, gint y);
-
-void pong_paddle_set_size (Paddle *p, gint w, gint h);
+void pong_paddle_set_size (PongPaddle *p, gint w, gint h);
 
 #endif

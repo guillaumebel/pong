@@ -19,16 +19,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef PROPERTIES_H_
+#define PROPERTIES_H_
 
 #include <string.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gdk/gdkkeysyms.h>
 #include <gconf/gconf-client.h>
-
-#include "color.h"
 
 #define REBOND 7
 
@@ -61,41 +59,32 @@
 #define TWOPLAYER_KEY GCONF_DIR "/two_player"
 #define BALLSIZE_KEY GCONF_DIR "/ball_size"
 
-typedef struct Config {
-    int screen_w;
-    int screen_h;
-    int difficulty; //difficulty easy, medium. hard
-    PongColor color_player1;
-    PongColor color_player2;
-    PongColor16 background_color;
-    int win_score;
-    gboolean two_player;
-    int paddle_size; //tiny, normal, big 
-    int ball_size; //tiny, normal, big
-} Config;
+typedef struct PongProperties {
+	int screen_w;
+	int screen_h;
+	int difficulty; //difficulty easy, medium. hard
+	int win_score;
+	gboolean two_player;
+	int paddle_size; //tiny, normal, big 
+	int ball_size; //tiny, normal, big
+} PongProperties;
 
 static const char* pong_key_name[] = {
-    "width",
-    "height",
-    "difficulty",
-    "player1_color",
-    "player2_color",
-    "background_color",
-    "paddle_size",
-    "win_score",
-    "ball_size",
-    NULL
+	"width",
+	"height",
+	"difficulty",
+	"paddle_size",
+	"win_score",
+	"ball_size",
+	NULL
 };
 
 static GConfClient *gconf_client = NULL;
 
-void pong_config_init ();
-Config* pong_config_load ();
-void pong_config_save (Config *c);
+void pong_properties_init (void);
+PongProperties* pong_properties_load (void);
+void pong_properties_save (PongProperties *prop);
 
-void pong_config_reset_default ();
-
-PongColor pong_config_get_color (gchar *key);
-PongColor16 pong_config_get_color16 (gchar *key);
+void pong_properties_reset_default (void);
 
 #endif

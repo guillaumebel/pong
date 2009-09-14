@@ -23,14 +23,10 @@
 #ifndef BALL_H_
 #define BALL_H_
 
-#include <stdlib.h>
-#include <math.h>
-#include <gtk/gtk.h>
 #include <clutter/clutter.h>
-
 #include "properties.h"
 
-typedef struct Ball {
+typedef struct PongBall {
     ClutterActor *actor;
     float hspeed;
     float vspeed;
@@ -38,17 +34,15 @@ typedef struct Ball {
     int x;
     int y;
     int size;
-} Ball;
+} PongBall;
 
-static ClutterTimeline *explode_tl = NULL;
+PongBall* pong_ball_new ();
 
-Ball* pong_ball_new ();
+void pong_ball_set_position (PongBall *p, gfloat x, gfloat y);
 
-void pong_ball_set_position (Ball *p, gint x, gint y);
+void pong_ball_set_size (PongBall *p, gint r);
 
-void pong_ball_set_size (Ball *p, gint r);
-
-void pong_ball_explode (Ball *p);
+void pong_ball_explode (PongBall *p);
 
 
 #endif

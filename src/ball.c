@@ -19,77 +19,48 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <stdlib.h>
+#include <math.h>
+#include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#include <clutter/clutter.h>
+#include <clutter-gtk/clutter-gtk.h>
 
 #include "ball.h"
+#include "pong.h"
 
+extern GdkPixbuf* pong_pixbuf[];
 
-Ball* pong_ball_new ()
+PongBall *
+pong_ball_new (void) 
 {
-    cairo_t *cr;
-    cairo_pattern_t *pattern;
-    Ball *b = g_new (Ball,1);
+  PongBall *ball = g_new (PongBall,1);
 
-    b->speed = 3;
-    b->x = SCREEN_W / 2;
-    b->y = SCREEN_H / 2;
-    b->size = BALL_NORMAL;
+  ball->speed = 3;
+  ball->x = SCREEN_W / 2;
+  ball->y = SCREEN_H / 2;
+  ball->size = BALL_NORMAL;
 
-    srand(time(NULL));
-    float dir = ((float)(rand() % 9100 - 4600) / 100) * (M_PI/180);
-    b->hspeed = b->speed * cos(dir);
-    b->vspeed = b->speed * sin(dir);
-
-    b->actor = clutter_cairo_new (BALL_NORMAL * 2, BALL_NORMAL * 2);
-    cr = clutter_cairo_create (CLUTTER_CAIRO (b->actor));
-
-    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-    cairo_paint (cr);
-    cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-
-    cairo_arc (cr, BALL_NORMAL, BALL_NORMAL, BALL_NORMAL, 0.0, 2 * M_PI);
-
-    pattern = cairo_pattern_create_radial (BALL_NORMAL, BALL_NORMAL, 0,
-                                                BALL_NORMAL, BALL_NORMAL, BALL_NORMAL);
-    cairo_pattern_add_color_stop_rgba (pattern, 0, 0.88, 0.95, 0.99, 0.1);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.6, 0.88, 0.95, 0.99, 0.1);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.8, 0.67, 0.83, 0.91, 0.2);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.9, 0.5, 0.67, 0.88, 0.7);
-    cairo_pattern_add_color_stop_rgba (pattern, 1.0, 0.3, 0.43, 0.69, 0.8);
-
-    cairo_set_source (cr, pattern);
-    cairo_fill_preserve (cr);
-
-    cairo_pattern_destroy (pattern);
-
-    pattern = cairo_pattern_create_linear (0, 0, BALL_NORMAL * 2, BALL_NORMAL * 2);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.0, 1.0, 1.0, 1.0, 0.0);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.15, 1.0, 1.0, 1.0, 0.95);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.3, 1.0, 1.0, 1.0, 0.0);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.7, 1.0, 1.0, 1.0, 0.0);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.85, 1.0, 1.0, 1.0, 0.95);
-    cairo_pattern_add_color_stop_rgba (pattern, 1.0, 1.0, 1.0, 1.0, 1.0);
-
-    cairo_set_source (cr, pattern);
-    cairo_fill_preserve (cr);
-
-    cairo_set_source_rgba(cr, 1, 1, 1, 0.6);
-    cairo_set_source (cr, pattern);
-    cairo_fill (cr);
-
-    cairo_pattern_destroy (pattern);
-    cairo_destroy (cr);
+  srand (time (NULL));
+  float dir = ((float) (rand() % 9100 - 4600) / 100) * (M_PI / 180);
+  ball->hspeed = ball->speed * cos (dir);
+  ball->vspeed = ball->speed * sin (dir);
   
-    return b;
+  ball->actor = gtk_clutter_texture_new_from_pixbuf (pong_pixbuf[0]);
+
+  return ball;
 }
 
-void pong_ball_set_position (Ball *b, gint x, gint y)
+void
+pong_ball_set_position (PongBall *ball, gfloat x, gfloat y)
 {
-    clutter_actor_set_position (CLUTTER_ACTOR (b->actor), x, y);
+  clutter_actor_set_position (CLUTTER_ACTOR (ball->actor), x, y);
 }
 
-void pong_ball_set_size (Ball *b, gint r)
+void
+pong_ball_set_size (PongBall *ball, gint r)
 {
-    b->size = r;
-    clutter_actor_set_size (CLUTTER_ACTOR (b->actor), r, r);
+  ball->size = r;
+  clutter_actor_set_size (CLUTTER_ACTOR (ball->actor), r, r);
 }
 

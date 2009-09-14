@@ -19,89 +19,44 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <gtk/gtk.h>
+#include <clutter/clutter.h>
+#include <clutter-gtk/clutter-gtk.h>
 
 #include "paddle.h"
+#include "pong.h"
 
-Paddle*
-pong_paddle_new ()
+extern GdkPixbuf *pong_pixbuf[];
+
+PongPaddle*
+pong_paddle_new (gint number)
 {
-    cairo_t *cr;
-    cairo_pattern_t *pattern;
-    Paddle *pad = g_new (Paddle,1);
+  PongPaddle *pad = g_new (PongPaddle,1);
 
-    pad->size = PADDLE_NORMAL_H;
-    pad->width = PADDLE_NORMAL_W;
-    pad->speed = 3;
+  pad->size = PADDLE_NORMAL_H;
+  pad->width = PADDLE_NORMAL_W;
+  pad->speed = 3;
+  pad->number = number;
 
-    pad->actor = clutter_cairo_new (PADDLE_NORMAL_W * 2, PADDLE_NORMAL_W * 2);
-    cr = clutter_cairo_create (CLUTTER_CAIRO (pad->actor));
-
-    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-    cairo_paint (cr);
-    cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-
-    cairo_rectangle (cr, 0, 0, PADDLE_NORMAL_W, PADDLE_NORMAL_H);
-    
-    pattern = cairo_pattern_create_linear (0, PADDLE_NORMAL_H / 2, 
-                                                PADDLE_NORMAL_W, PADDLE_NORMAL_H / 2);
-
-    cairo_pattern_add_color_stop_rgba (pattern, 0.40,  0.09, 0.18, 0.33, 0.75);
-    cairo_pattern_add_color_stop_rgba (pattern, 0.75,  0.25, 0.5, .85, 0.75);
-
-    cairo_set_source (cr, pattern);
-    cairo_fill (cr);
-
-    cairo_pattern_destroy (pattern);
-    cairo_destroy (cr);
+  pad->actor = gtk_clutter_texture_new_from_pixbuf (pong_pixbuf[number]);
+  clutter_actor_set_size (pad->actor, 
+                          PADDLE_NORMAL_W * 2, 
+                          PADDLE_NORMAL_H * 2);
   
-    return pad;
+  return pad;
 }
 
 void
-pong_paddle_set_color (Paddle *p, PongColor start, PongColor stop)
+pong_paddle_set_position (PongPaddle *p, gfloat x, gfloat y)
 {
-    cairo_t *cr;
-    cairo_pattern_t *pattern;
-
-    cr = clutter_cairo_create (CLUTTER_CAIRO (p->actor));
-
-    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-    cairo_paint (cr);
-    cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-
-    cairo_rectangle (cr, 0, 0, PADDLE_NORMAL_W, PADDLE_NORMAL_H);
-    
-    pattern = cairo_pattern_create_linear (0, PADDLE_NORMAL_H / 2, 
-                                                PADDLE_NORMAL_W, PADDLE_NORMAL_H / 2);
-
-    cairo_pattern_add_color_stop_rgba (pattern, 0.40,  start.red, 
-                                                       start.green, 
-                                                       start.blue, 
-                                                       start.alpha);
-
-    cairo_pattern_add_color_stop_rgba (pattern, 0.75,  stop.red, 
-                                                       stop.green, 
-                                                       stop.blue, 
-                                                       stop.alpha);
-
-    cairo_set_source (cr, pattern);
-    cairo_fill (cr);
-
-    cairo_pattern_destroy (pattern);
-    cairo_destroy (cr);
+  clutter_actor_set_position (CLUTTER_ACTOR (p->actor), x, y);
 }
 
 void
-pong_paddle_set_position (Paddle *p, gint x, gint y)
+pong_paddle_set_size (PongPaddle *p, gint w, gint h)
 {
-    clutter_actor_set_position (CLUTTER_ACTOR (p->actor), x, y);
-}
-
-void
-pong_paddle_set_size (Paddle *p, gint w, int h)
-{
-    p->width = w;
-    p->size = h;
-    clutter_actor_set_size (CLUTTER_ACTOR (p->actor), w, h);
+  p->width = w;
+  p->size = h;
+  clutter_actor_set_size (CLUTTER_ACTOR (p->actor), w, h);
 }
 
