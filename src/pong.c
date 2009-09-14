@@ -38,8 +38,8 @@ pong_load_pixmap_file (const gchar* pixmap, gint xsize, gint ysize)
   GdkPixbuf *image;
   gchar *filename;
   const char *dirname;
-  dirname = "../pix";
-  filename = g_build_filename (dirname, pixmap, NULL);
+  dirname = g_get_current_dir ();
+  filename = g_build_filename (dirname, "pix", pixmap, NULL);
 
   image = gdk_pixbuf_new_from_file_at_scale (filename, xsize, ysize, TRUE, NULL);
   g_free (filename);
@@ -70,9 +70,10 @@ pong_load_pixbuf (void)
 void
 pong_init (void) 
 {
-	game = g_new (PongGame, 1);	
-	game->p1 = pong_paddle_new ();
-	game->p2 = pong_paddle_new ();
+	game = g_new (PongGame, 1);
+  pong_load_pixbuf ();
+  game->p1 = pong_paddle_new (1);
+	game->p2 = pong_paddle_new (2);
 	game->ball = pong_ball_new ();
 
 	switch (properties->paddle_size) {

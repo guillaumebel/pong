@@ -350,14 +350,12 @@ main (int argc, char **argv)
 		pong_properties_init ();
 		properties = pong_properties_load ();
 	}
-
+  
 	pong_init ();
 	
 	//Clutter declaration
-	ClutterActor *background = NULL;
 	ClutterActor *stage = NULL;
-	ClutterColor stage_color = {0x01, 0x05, 0x1e, 0xff};
-	ClutterColor label_color = {0xFF, 0xFF, 0xFF, 0xff};
+	ClutterColor stage_color = {0x00, 0x00, 0x00, 0xff};
 
 	//Gtk declaration
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -407,7 +405,9 @@ main (int argc, char **argv)
 	// some more gtk stuff
 	gtk_window_set_title (GTK_WINDOW (window), "Pong!");
 
-	gtk_window_set_default_size (GTK_WINDOW (window), properties->screen_w, properties->screen_h + 50);
+	gtk_window_set_default_size (GTK_WINDOW (window), 
+                               properties->screen_w, 
+                               properties->screen_h + 50);
 
 	accel_group = gtk_ui_manager_get_accel_group (ui_manager);
 	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
@@ -431,45 +431,35 @@ main (int argc, char **argv)
 	//stage
 	stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter_widget));
 	clutter_stage_set_color (CLUTTER_STAGE (stage), &stage_color);
-	clutter_stage_set_user_resizable (CLUTTER_STAGE (stage), TRUE);
 	clutter_stage_hide_cursor (CLUTTER_STAGE (stage));
 
-
 	//Paddle 1
-	pong_paddle_set_size (game->p1, 
-							game->p1->width, game->p1->size);  
-	pong_paddle_set_position (game->p1, 6, game->player1_y);
-	
+	pong_paddle_set_position (game->p1, 3, game->player1_y);	
 	clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
-										 game->p1->actor);
+										           game->p1->actor);
 
 	//Paddle 2
-	pong_paddle_set_size (game->p2, 
-							game->p2->width, game->p2->size);
-	pong_paddle_set_position (game->p2, properties->screen_w - 10, game->player2_y);
-
+	pong_paddle_set_position (game->p2, properties->screen_w - 14, game->player2_y);
 	clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
-										 game->p2->actor);
+										           game->p2->actor);
 	
 	//ball
 	pong_ball_set_size (game->ball, game->ball->size);
-	pong_ball_set_position (game->ball, 
-								game->ball->x, game->ball->y);
+	pong_ball_set_position (game->ball, game->ball->x, game->ball->y);
 	clutter_container_add_actor (CLUTTER_CONTAINER (stage), game->ball->actor);
 	
 	//callback connect
-	g_signal_connect (stage, "motion-event", G_CALLBACK (on_stage_motion_event_cb), NULL);
+	g_signal_connect (stage, "motion-event", 
+                    G_CALLBACK (on_stage_motion_event_cb), NULL);
 
 	g_signal_connect (stage, "key-press-event", G_CALLBACK (key_press_cb), NULL);
 	g_signal_connect (window, "hide", G_CALLBACK (gtk_main_quit), NULL);
 	g_signal_connect (G_OBJECT (window), "destroy", 
-							G_CALLBACK (gtk_main_quit), NULL);
+							      G_CALLBACK (gtk_main_quit), NULL);
 	g_signal_connect (G_OBJECT (window), "delete_event",
-							G_CALLBACK (delete_cb), NULL);
+							      G_CALLBACK (delete_cb), NULL);
 	g_signal_connect (G_OBJECT (window), "window_state_event",
-							G_CALLBACK (window_state_cb), NULL);
-	g_signal_connect (G_OBJECT (window), "size-request",
-							G_CALLBACK (window_resize_cb), background);
+							      G_CALLBACK (window_state_cb), NULL);
 							
 	gtk_widget_show (GTK_WIDGET (window));
 

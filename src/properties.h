@@ -32,7 +32,7 @@
 
 #define PADDLE_TINY_W 8
 #define PADDLE_TINY_H 50
-#define PADDLE_NORMAL_W 11  
+#define PADDLE_NORMAL_W 10  
 #define PADDLE_NORMAL_H 70
 #define PADDLE_BIG_W 14
 #define PADDLE_BIG_H 90

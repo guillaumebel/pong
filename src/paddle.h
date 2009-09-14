@@ -34,7 +34,7 @@ typedef struct PongPaddle {
   gint number;
 } PongPaddle;
 
-PongPaddle* pong_paddle_new ();
+PongPaddle* pong_paddle_new (gint number);
 
 void pong_paddle_set_position (PongPaddle *p, gfloat x, gfloat y);
 

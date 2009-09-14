@@ -40,8 +40,8 @@ pong_paddle_new (gint number)
 
   pad->actor = gtk_clutter_texture_new_from_pixbuf (pong_pixbuf[number]);
   clutter_actor_set_size (pad->actor, 
-                          PADDLE_NORMAL_W * 2, 
-                          PADDLE_NORMAL_H * 2);
+                          PADDLE_NORMAL_W, 
+                          PADDLE_NORMAL_H);
   
   return pad;
 }
