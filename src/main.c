@@ -41,6 +41,7 @@ PongProperties *properties;
 PongGame *game;
 gint main_id;
 
+extern GdkPixbuf *pong_pixbuf[];
 static Scoreboard *sb = NULL;
 
 static GtkAction *fullscreen_action;
@@ -358,6 +359,7 @@ main (int argc, char **argv)
 	pong_init ();
 	
 	//Clutter declaration
+  ClutterActor *background = NULL;
 	ClutterActor *stage = NULL;
 	ClutterColor stage_color = {0x00, 0x00, 0x00, 0xff};
 
@@ -431,13 +433,16 @@ main (int argc, char **argv)
 
 	gtk_box_pack_end (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
 	gtk_widget_show (statusbar);
-	
+  
 	//stage
 	stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter_widget));
 	clutter_stage_set_color (CLUTTER_STAGE (stage), &stage_color);
 	clutter_stage_hide_cursor (CLUTTER_STAGE (stage));
 
-	//Paddle 1
+  background = gtk_clutter_texture_new_from_pixbuf (pong_pixbuf[3]);
+  clutter_container_add_actor (CLUTTER_CONTAINER (stage), background);
+
+  //Paddle 1
 	pong_paddle_set_position (game->p1, 3, game->player1_y);	
 	clutter_container_add_actor (CLUTTER_CONTAINER (stage), 
 										           game->p1->actor);

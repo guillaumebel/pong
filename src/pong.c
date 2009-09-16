@@ -27,7 +27,7 @@
 #include "ball.h"
 #include "pong.h"
 
-GdkPixbuf *pong_pixbuf[3] = {NULL, NULL, NULL};
+GdkPixbuf *pong_pixbuf[4] = {NULL, NULL, NULL, NULL};
 
 extern PongGame *game;
 extern PongProperties *properties;
@@ -53,7 +53,8 @@ pong_load_pixbuf (void)
   gchar *pixbuf_files[] = {
 	  "ball_green.svg",
 	  "paddle_blue.svg",
-	  "paddle_red.svg"
+	  "paddle_red.svg",
+    "bkg.svg"
   };
 
   pong_pixbuf[0] = pong_load_pixmap_file (pixbuf_files[0],
@@ -65,6 +66,9 @@ pong_load_pixbuf (void)
   pong_pixbuf[2] = pong_load_pixmap_file (pixbuf_files[2], 
 										                     2 * PADDLE_NORMAL_W,
 										                     2 * PADDLE_NORMAL_H);
+  pong_pixbuf[3] = pong_load_pixmap_file (pixbuf_files[3],
+                                         2 * SCREEN_H,
+                                         2 * SCREEN_W);
 }
 
 void
